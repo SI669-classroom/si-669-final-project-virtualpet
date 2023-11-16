@@ -5,13 +5,13 @@ const LOAD_PET = 'LOAD_PET'
 
 const initialState = {
     petStatus: {
-        key: null,
         name: "",
         type: "",
-        sanitary: null,
-        satiety: null,
-        mood: null,
+        sanitary: 100,
+        satiety: 100,
+        mood: 100,
         wasteNum: 0,
+        userId: 0,
         items: []
     }
 }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Icon } from "@rneui/base";
 import { Input, Button } from "@rneui/themed";
 import { createPet } from "../data/Action";
+import { useDispatch } from 'react-redux';
 
 const images = {
     dog: require('../assets/dog.png'),
@@ -15,10 +16,11 @@ function CreateScreen() {
     const types = ['dog', 'cat', 'parrot', 'hamster']
     const [typeIndex, setTypeIndex] = useState(0)
     const [name, setName] = useState('')
-
+    const dispatch = useDispatch()
     const handleClick = () => {
         const newPet = {
             name: name,
+            userId: 0,
             type: types[typeIndex],
             sanitary: 100,
             satiety: 100,
@@ -26,15 +28,17 @@ function CreateScreen() {
             wasteNum: 0,
             items: []
         }
+        dispatch(createPet(newPet))
         Alert.alert('Dev Message', `The following object has been added to firebase: \n ${JSON.stringify(newPet)}`, [
-            { text: 'OK', onPress: () => console.log('OK Pressed') },
+            { text: 'OK' },
         ]);
-
-        createPet(newPet)
     }
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: "space-evenly", height: '100%', paddingBottom: "10%" }} behavior='padding'>
+        <View style={{
+            flex: 1, alignItems: 'center', justifyContent: "space-evenly", height: '100%', paddingBottom: "10%",
+            backgroundColor: "#D6EEBB"
+        }} behavior='padding'>
             <View style={{ ...styles.col }}>
                 <Text style={{ fontSize: 28, fontWeight: 900, height: "10%" }}>{name}</Text>
                 <View style={styles.row}>
@@ -46,10 +50,10 @@ function CreateScreen() {
                         <Icon
                             name="chevron-left"
                             type="font-awesome"
-                            color={typeIndex === 0 ? "lightgray" : "black"}
+                            color={typeIndex === 0 ? "#AFDC89" : "#127A33"}
                         />
                     </Button>
-                    <View style={{ width: '50%', height: 250, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ width: '50%', height: 320, alignItems: 'center', justifyContent: 'center' }}>
                         <Image source={images[types[typeIndex]]} />
                     </View>
                     <Button
@@ -60,10 +64,9 @@ function CreateScreen() {
                         <Icon
                             name="chevron-right"
                             type="font-awesome"
-                            color={typeIndex === 3 ? "lightgray" : "black"} />
+                            color={typeIndex === 3 ? "#AFDC89" : "#127A33"} />
                     </Button>
                 </View>
-                <Text style={{ textTransform: 'uppercase' }}>{types[typeIndex]}</Text>
             </View>
             <View style={{ width: '80%', ...styles.col }}>
                 <Input
@@ -75,7 +78,7 @@ function CreateScreen() {
                     onChangeText={(newText) => setName(newText)}
                 />
                 <Button
-                    buttonStyle={{ backgroundColor: 'black' }}
+                    buttonStyle={{ backgroundColor: '#127A33' }}
                     onPress={handleClick}
                 >
                     Adopted!
@@ -106,6 +109,6 @@ const styles = StyleSheet.create({
         padding: 5,
         marginTop: 10,
         borderRadius: 10,
-        backgroundColor: "lightgray"
+        backgroundColor: "white"
     }
 })
