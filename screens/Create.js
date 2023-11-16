@@ -1,7 +1,8 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Alert } from "react-native";
 import { useState } from "react";
 import { Icon } from "@rneui/base";
 import { Input, Button } from "@rneui/themed";
+import { createPet } from "../data/Action";
 
 const images = {
     dog: require('../assets/dog.png'),
@@ -16,7 +17,20 @@ function CreateScreen() {
     const [name, setName] = useState('')
 
     const handleClick = () => {
-        console.log("clicked");
+        const newPet = {
+            name: name,
+            type: types[typeIndex],
+            sanitary: 100,
+            satiety: 100,
+            mood: 100,
+            wasteNum: 0,
+            items: []
+        }
+        Alert.alert('Dev Message', `The following object has been added to firebase: \n ${JSON.stringify(newPet)}`, [
+            { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
+
+        createPet(newPet)
     }
 
     return (
@@ -62,7 +76,7 @@ function CreateScreen() {
                 />
                 <Button
                     buttonStyle={{ backgroundColor: 'black' }}
-                    onPress={{ handleClick }}
+                    onPress={handleClick}
                 >
                     Adopted!
                 </Button>
