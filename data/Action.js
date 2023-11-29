@@ -1,7 +1,7 @@
 
-import { CREATE_PET, LOAD_PET } from "./Reducer";
+import { CREATE_PET, LOAD_PET, UPDATE_PET } from "./Reducer";
 import { initializeApp } from 'firebase/app';
-import { getFirestore, addDoc, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, addDoc, collection, getDocs, where, query, updateDoc, doc } from 'firebase/firestore';
 
 import { firebaseConfig } from '../Secrets';
 
@@ -21,11 +21,12 @@ const createPet = (petStatus) => {
     }
 }
 
-const loadPet = () => {
+const loadPet = (userId) => {
     return async (dispatch) => {
-        let querySnapshot = await getDocs(collection(db, 'pet'));
+        const q = query(collection(db, "pet"), where('userId', '==', userId));
+        let querySnapshot = await getDocs(q);
         const data = querySnapshot.docs[0]
-        let petStatus = { ...data, key: data.id }
+        let petStatus = { ...data.data(), key: data.id }
         dispatch({
             type: LOAD_PET,
             payload: {
@@ -35,4 +36,17 @@ const loadPet = () => {
     }
 }
 
-export { createPet, loadPet }
+const updatePet = (pet, key, value) => {
+    return async (dispatch) => {
+        await updateDoc(doc(db, 'pet', pet.key), { [key]: value });
+        dispatch({
+            type: UPDATE_PET,
+            payload: {
+                key: key,
+                value: value
+            }
+        });
+    }
+}
+
+export { createPet, loadPet, updatePet }

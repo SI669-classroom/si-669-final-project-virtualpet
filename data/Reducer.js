@@ -1,6 +1,7 @@
 
 const CREATE_PET = 'CREATE_PET';
 const LOAD_PET = 'LOAD_PET'
+const UPDATE_PET = 'UPDATE_PET'
 
 
 const initialState = {
@@ -30,6 +31,18 @@ const loadPet = (state, petStatus) => {
     };
 }
 
+const updatePet = (state, key, value) => {
+    let { petStatus } = state;
+    return {
+        ...state,
+        petStatus: {
+            ...petStatus,
+            [key]: value
+        }
+    };
+}
+
+
 function rootReducer(state = initialState, action) {
     const { type, payload } = action;
     switch (type) {
@@ -37,6 +50,8 @@ function rootReducer(state = initialState, action) {
             return createPet(state, payload.petStatus);
         case LOAD_PET:
             return loadPet(state, payload.petStatus);
+        case UPDATE_PET:
+            return updatePet(state, payload.key, payload.value)
         default:
             return state;
     }
@@ -45,5 +60,6 @@ function rootReducer(state = initialState, action) {
 export {
     rootReducer,
     CREATE_PET,
-    LOAD_PET
+    LOAD_PET,
+    UPDATE_PET
 };

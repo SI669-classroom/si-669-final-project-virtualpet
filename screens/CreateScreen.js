@@ -4,6 +4,7 @@ import { Icon } from "@rneui/base";
 import { Input, Button } from "@rneui/themed";
 import { createPet } from "../data/Action";
 import { useDispatch } from 'react-redux';
+import { getAuthUser } from "../AuthManager";
 
 const images = {
     dog: require('../assets/dog.png'),
@@ -12,15 +13,17 @@ const images = {
     hamster: require('../assets/hamster.png'),
 };
 
-function CreateScreen() {
+function CreateScreen({navigation}) {
     const types = ['dog', 'cat', 'parrot', 'hamster']
     const [typeIndex, setTypeIndex] = useState(0)
     const [name, setName] = useState('')
     const dispatch = useDispatch()
+    const userId = getAuthUser()?.uid
+
     const handleClick = () => {
         const newPet = {
             name: name,
-            userId: 0,
+            userId: userId,
             type: types[typeIndex],
             sanitary: 100,
             satiety: 100,
@@ -29,9 +32,7 @@ function CreateScreen() {
             items: []
         }
         dispatch(createPet(newPet))
-        Alert.alert('Dev Message', `The following object has been added to firebase: \n ${JSON.stringify(newPet)}`, [
-            { text: 'OK' },
-        ]);
+        navigation.navigate('Home')
     }
 
     return (
