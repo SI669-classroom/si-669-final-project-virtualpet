@@ -9,11 +9,11 @@ const initialState = {
         name: "",
         type: "",
         sanitary: 100,
-        satiety: 100,
+        satiety: 50,
         mood: 100,
         wasteNum: 0,
         userId: 0,
-        items: []
+        items: { item1: 10 }
     }
 }
 

@@ -13,7 +13,7 @@ const images = {
     hamster: require('../assets/hamster.png'),
 };
 
-function CreateScreen({navigation}) {
+function CreateScreen({ navigation }) {
     const types = ['dog', 'cat', 'parrot', 'hamster']
     const [typeIndex, setTypeIndex] = useState(0)
     const [name, setName] = useState('')
@@ -25,11 +25,11 @@ function CreateScreen({navigation}) {
             name: name,
             userId: userId,
             type: types[typeIndex],
-            sanitary: 100,
-            satiety: 100,
-            mood: 100,
+            sanitary: 50,
+            satiety: 50,
+            mood: 50,
             wasteNum: 0,
-            items: []
+            items: { item1: 10, item3: 10, item4: 10 }
         }
         dispatch(createPet(newPet))
         navigation.navigate('Home')

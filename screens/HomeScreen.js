@@ -19,9 +19,9 @@ const images = {
 const items =
 {
   item1: 'satiety',
-  item2: 'mood',
-  item3: 'satiety',
-  item4: 'satiety'
+  item2: 'satiety',
+  item3: 'sanitary',
+  item4: 'mood'
 }
 
 function HomeScreen({ navigation }) {
@@ -76,7 +76,7 @@ function HomeScreen({ navigation }) {
             {Object.keys(items).slice(0, 4).map((name, i) =>
               <Item key={i} number={pet.items[name]} type={name}
                 onPress={() => {
-                  dispatch(updatePet(pet, items[name], pet.satiety + 10));
+                  dispatch(updatePet(pet, items[name], pet[items[name]] + 10));
                   dispatch(updatePet(pet, 'items', { ...pet.items, [name]: pet.items[name] - 1 }));
                   setShowItems(false)
                 }}
@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
   progressLabel: {
     width: 60,
     color: '#127A33',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textTransform: "capitalize"
   },
   progressWrapper: { gap: 10, width: '100%', justifyContent: "center", alignItems: "center", marginBottom: 20 },
   itemContainer: { backgroundColor: 'beige', width: "100%", height: "40%", position: "absolute", bottom: 0, justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20, paddingVertical: 30, gap: 20 },

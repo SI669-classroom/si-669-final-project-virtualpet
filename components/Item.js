@@ -8,10 +8,9 @@ const images = {
 };
 
 export const Item = ({ type, number, onPress }) => {
-    console.log(type, number);
     return (
         <TouchableOpacity style={styles.container} onPress={onPress} disabled={!number}>
-            <Image source={images[type]} />
+            <Image source={images[type]} style={!number && styles.disabled} />
             <Text style={styles.text}>{number ?? 0}</Text>
         </TouchableOpacity>
     )
@@ -19,5 +18,6 @@ export const Item = ({ type, number, onPress }) => {
 
 const styles = StyleSheet.create({
     container: { backgroundColor: 'white', justifyContent: "center", alignItems: "center", padding: 10, position: "relative", borderRadius: 5 },
-    text: { alignSelf: 'flex-end', fontSize: 12, position: 'absolute', bottom: 2, right: 5, fontWeight: 600 }
+    text: { alignSelf: 'flex-end', fontSize: 12, position: 'absolute', bottom: 2, right: 5, fontWeight: 600 },
+    disabled: {opacity: 0.5}
 });

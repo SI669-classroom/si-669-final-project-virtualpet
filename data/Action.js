@@ -9,6 +9,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const createPet = (petStatus) => {
+    
     return async (dispatch) => {
         const docRef = await addDoc(collection(db, 'pet'), petStatus);
         const id = docRef.id;
