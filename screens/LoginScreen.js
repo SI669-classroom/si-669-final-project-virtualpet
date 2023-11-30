@@ -12,14 +12,11 @@ function SigninBox({navigation}) {
       <View style={styles.loginContainer}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/logo.png')} // Change to the path of your logo
+            source={require('../assets/logo.png')}
             style={styles.logo}
           />
         </View>
-
             <Text style={styles.loginHeaderText}>Log In</Text>
-          
-         
             <View style={styles.loginLabelContainer}>
               <Text style={styles.loginLabelText}>Email: </Text>
             </View>
@@ -33,9 +30,7 @@ function SigninBox({navigation}) {
                 value={email}
               />
             </View>
-       
 
-   
             <View style={styles.loginLabelContainer}>
               <Text style={styles.loginLabelText}>Password: </Text>
             </View>
@@ -57,6 +52,8 @@ function SigninBox({navigation}) {
               onPress={async () => {
                 try {
                   await signIn(email, password);
+                  setEmail('')
+                  setPassword('')
                 } catch(error) {
                   Alert.alert("Wrong username or password", error.message,[{ text: "OK" }])
                 }
@@ -170,6 +167,9 @@ function SignupBox({navigation}) {
           onPress={async () => {
             try {
               await signUp(displayName, email, password);
+              setDisplayName('')
+              setEmail('')
+              setPassword('')
             } catch(error) {
               Alert.alert("Sign Up Error", error.message,[{ text: "OK" }])
             }

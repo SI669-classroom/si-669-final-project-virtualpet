@@ -10,6 +10,7 @@ import LoginScreen from './screens/LoginScreen';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './data/Reducer';
+import WalkScreen from './screens/WalkScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ function App() {
           <Stack.Screen name='Login' component={LoginScreen}/>
           <Stack.Screen name="Create" component={CreateScreen} />
           <Stack.Screen name='Home' component={HomeScreen}/>
+          <Stack.Screen name='Walk' component={WalkScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -63,7 +63,10 @@ function HomeScreen({ navigation }) {
       </View>
 
       <View style={styles.row}>
-        {['Play', 'Walk'].map((action, i) => <ActionButton key={i} type={action} onPress={() => setShowItems(true)} />)}
+        <ActionButton type="Play" onPress={() => setShowItems(true)} />
+        <ActionButton type="Walk" onPress={() => 
+          navigation.navigate('Walk') 
+        } />
       </View>
 
       <Button onPress={() => signOut()}>Sign out</Button>
