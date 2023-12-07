@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Icon, LinearProgress, Overlay } from 'react-native-elements'
 
 const images = {
-    dog: require('../assets/dogWalk.png'),
+    dog: require('../assets/dog-walk.png'),
     cat: require('../assets/cat.png'),
     parrot: require('../assets/parrot.png'),
     hamster: require('../assets/hamster.png')
@@ -81,7 +81,7 @@ function WalkScreen({ navigation }) {
         else if (hasWalkEnded) {
             return <Text style={{ fontSize: 20, textAlign: 'center' }}>{walkEndMessage}</Text>
         } else {
-            return <Text style={styles.statementText}>I'm ready, let's walk</Text>
+            return <Text style={styles.statementText}>I'm ready, let's walk!</Text>
         }
     }
 
@@ -113,21 +113,11 @@ function WalkScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <Text style={styles.petName}>{pet.name}</Text>
-            <View style={{ width: '100%', height: 320, alignItems: 'center', justifyContent: 'center', position: "relative", marginBottom: 20 }}>
-                <Image source={images[pet.type]} />
-                <Button
-                    containerStyle={{ position: "absolute", right: 20, bottom: 70 }}
-                    buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
-                    onPress={() => setShowItems(!showItems)}
-                >
-                    <Icon type="material-community" name="bag-personal" size={30} />
-                </Button>
-
-                {renderStatement()}
-                {renderButton()}
-
+            <View style={{ width: '100%', height: '30%', alignItems: 'center', justifyContent: 'center' }}>
+                <Image source={images[pet.type]} style={{ flex: 1, resizeMode: 'contain', marginBottom: 50 }} />
             </View>
-
+            {renderStatement()}
+            {renderButton()}
         </View >
     );
 }
@@ -154,17 +144,30 @@ const styles = StyleSheet.create({
         color: '#127A33',
         fontWeight: 'bold'
     },
-    itemContainer: { backgroundColor: 'beige', width: "100%", height: "40%", position: "absolute", bottom: 0, justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20, paddingVertical: 30, gap: 20 },
-    petName: { fontSize: 28, fontWeight: 900, marginBottom: 80 },
-
+    itemContainer: {
+        backgroundColor: 'beige',
+        width: "100%", height: "40%",
+        position: "absolute",
+        bottom: 0,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingHorizontal: 20,
+        paddingVertical: 30,
+        gap: 20
+    },
+    petName: {
+        fontSize: 28,
+        fontWeight: 900,
+        marginBottom: 80
+    },
     buttonContainer: {
         flexDirection: 'row', // Add this line to make buttons display in a row
         justifyContent: 'space-between', // Center buttons horizontally
         marginTop: 25,
     },
-
     statementText: {
         fontSize: 35,
     },
 });
+
 export default WalkScreen;
