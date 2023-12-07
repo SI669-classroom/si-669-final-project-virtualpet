@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { getAuthUser } from "../AuthManager";
 
 const images = {
-    dog: require('../assets/dog.png'),
+    dog: require('../assets/dog-default.png'),
     cat: require('../assets/cat.png'),
     parrot: require('../assets/parrot.png'),
     hamster: require('../assets/hamster.png'),

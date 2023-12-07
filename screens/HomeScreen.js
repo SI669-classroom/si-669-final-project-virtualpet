@@ -1,5 +1,5 @@
 import { Button } from '@rneui/themed';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { getAuthUser, signOut } from '../AuthManager';
 import { useEffect, useState } from 'react';
 import { loadPet } from '../data/Action';
@@ -10,7 +10,7 @@ import { ActionButton } from '../components/ActionButton';
 import { updatePet } from '../data/Action';
 
 const images = {
-  dog: require('../assets/dog.png'),
+  dog: require('../assets/dog-default.png'),
   cat: require('../assets/cat.png'),
   parrot: require('../assets/parrot.png'),
   hamster: require('../assets/hamster.png')
@@ -35,17 +35,40 @@ function HomeScreen({ navigation }) {
     dispatch(loadPet(userId))
   }, [])
 
+  const [tempImage, setTempImage] = useState(null);
+
+
+  const handleItemPress = (name) => {
+
+    const newImage = require('../assets/dog-happy.png');
+    setTempImage(newImage);
+
+
+    dispatch(updatePet(pet, items[name], pet[items[name]] + 10));
+    dispatch(updatePet(pet, 'items', { ...pet.items, [name]: pet.items[name] - 1 }));
+    setShowItems(false)
+
+    setTimeout(() => {
+      setTempImage(null);
+    }, 3000);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.petName}>{pet.name}</Text>
-      <View style={{ width: '100%', height: 320, alignItems: 'center', justifyContent: 'center', position: "relative", marginBottom: 20 }}>
-        <Image source={images[pet.type]} />
+    <ImageBackground
+      source={require('../assets/background.png')}
+      style={styles.container}
+    >
+      <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 30, borderRadius: '50%', marginBottom: 20 }}>
+        <Text style={styles.petName}>{pet.name}</Text>
+      </View>
+      <View style={{ width: '100%', height: 320, alignItems: 'center', position: "relative", marginBottom: 20 }}>
+        <Image source={tempImage || images[pet.type]} style={{ ...styles.shadowBox, flex: 1, resizeMode: 'contain' }} />
         <Button
-          containerStyle={{ position: "absolute", right: 20, bottom: 10 }}
+          containerStyle={{ position: "absolute", right: 9, bottom: 135 }}
           buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
           onPress={() => setShowItems(!showItems)}
         >
-          <Icon type="material-community" name="bag-personal" size={30} />
+          <Image source={require('../assets/backpack.png')} style={{ ...styles.shadowBox, width: 60, height: 60 }} />
         </Button>
       </View>
 
@@ -64,40 +87,42 @@ function HomeScreen({ navigation }) {
 
       <View style={styles.row}>
         <ActionButton type="Play" onPress={() => setShowItems(true)} />
-        <ActionButton type="Walk" onPress={() => 
-          navigation.navigate('Walk') 
+        <ActionButton type="Walk" onPress={() =>
+          navigation.navigate('Walk')
         } />
       </View>
 
-      <Button onPress={() => signOut()}>Sign out</Button>
+      {/* <Button onPress={() => signOut()}>Sign out</Button> */}
       {
         showItems &&
-        <View
-          style={styles.itemContainer}>
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => setShowItems(false)}
+        >
           <Text style={{ fontSize: 20 }}>My Items</Text>
           <View style={styles.row}>
             {Object.keys(items).slice(0, 4).map((name, i) =>
-              <Item key={i} number={pet.items[name]} type={name}
-                onPress={() => {
-                  dispatch(updatePet(pet, items[name], pet[items[name]] + 10));
-                  dispatch(updatePet(pet, 'items', { ...pet.items, [name]: pet.items[name] - 1 }));
-                  setShowItems(false)
-                }}
+              <Item
+                key={i}
+                number={pet.items[name]}
+                type={name}
+                onPress={() => handleItemPress(name)}
               />)}
           </View>
-        </View>
+        </TouchableOpacity>
       }
-    </View >
+    </ImageBackground >
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 40,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#D6EEBB',
-    gap: 10
+    gap: 10,
+    resizeMode: "contain"
   },
   row: {
     flexDirection: 'row',
@@ -114,8 +139,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: "capitalize"
   },
-  progressWrapper: { gap: 10, width: '100%', justifyContent: "center", alignItems: "center", marginBottom: 20 },
-  itemContainer: { backgroundColor: 'beige', width: "100%", height: "40%", position: "absolute", bottom: 0, justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20, paddingVertical: 30, gap: 20 },
-  petName: { fontSize: 28, fontWeight: 900, marginBottom: 10 }
+  progressWrapper: {
+    gap: 10,
+    width: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20
+  },
+  itemContainer: {
+    backgroundColor: 'beige',
+    width: "100%", height: "40%",
+    position: "absolute", bottom: 0,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 30, gap: 20
+  },
+  petName: {
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  shadowBox: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+  }
 });
 export default HomeScreen;
