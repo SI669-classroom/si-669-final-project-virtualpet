@@ -9,6 +9,7 @@ import { Item } from '../components/Item';
 import { ActionButton } from '../components/ActionButton';
 import { updatePet } from '../data/Action';
 
+
 const images = {
   dog: require('../assets/dog-default.png'),
   cat: require('../assets/cat.png'),

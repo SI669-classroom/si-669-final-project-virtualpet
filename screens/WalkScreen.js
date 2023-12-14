@@ -2,7 +2,7 @@ import { Button } from '@rneui/themed';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Animated, Easing, ImageBackground } from 'react-native';
 import { getAuthUser, signOut } from '../AuthManager';
 import { useEffect, useState, useRef } from 'react';
-import { loadPet } from '../data/Action';
+import { loadPet, updatePet, updatePetMultiple } from '../data/Action';
 import { useDispatch, useSelector } from 'react-redux';
 import { Icon, LinearProgress, Overlay } from 'react-native-elements'
 import { ActionButton } from '../components/ActionButton';
@@ -12,6 +12,7 @@ import {
     watchPositionAsync 
   } from 'expo-location';
 import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+
 
 const images = {
     dog: require('../assets/dog-walk.png'),
@@ -45,6 +46,8 @@ function WalkScreen({ navigation }) {
     };
     const [mapRegion, setMapRegion] = useState(initRegion);
     const pet = useSelector((state) => state.petStatus);
+    const dispatch = useDispatch()
+    const userId = getAuthUser()?.uid
 
     useEffect(() => {
         const startLocationTracking = async () => {
@@ -156,6 +159,7 @@ function WalkScreen({ navigation }) {
             dogAnimation.current.stop();
         }
         dogAnimation.current = null;
+        dispatch(updatePetMultiple(pet, { mood: pet.mood + 10, satiety: pet.satiety - 5, sanitary: pet.sanitary - 5 }));
     };
 
     const formatTime = (totalSeconds) => {
