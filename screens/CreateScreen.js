@@ -38,7 +38,7 @@ function CreateScreen({ navigation }) {
     return (
         <View style={{
             flex: 1, alignItems: 'center', justifyContent: "space-evenly", height: '100%', paddingBottom: "10%",
-            backgroundColor: "#D6EEBB"
+            backgroundColor: "#D6E9E1"
         }} behavior='padding'>
             <View style={{ ...styles.col }}>
                 <Text style={{ fontSize: 28, fontWeight: 900, height: "10%" }}>{name}</Text>

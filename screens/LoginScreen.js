@@ -185,7 +185,7 @@ function SignupBox({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#DEF4C6',
+      backgroundColor: '#D6E9E1',
       alignItems: 'center',
       justifyContent: 'center',
 
