@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, Animated, Easing, ImageBackground } from 'react-native';
 import { getAuthUser } from '../AuthManager';
 import { useEffect, useState, useRef } from 'react';
-
+import { updatePetMultiple } from '../data/Action';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActionButton } from '../components/ActionButton';
 import {
