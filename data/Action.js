@@ -48,6 +48,21 @@ const updatePet = (pet, key, value) => {
             }
         });
     }
+};
+
+const updatePetMultiple = (pet, updatedFields) => {
+    return async (dispatch) => {
+        await updateDoc(doc(db, 'pet', pet.key), updatedFields);
+        Object.entries(updatedFields).forEach(([key, val]) => {
+            dispatch({
+                type: UPDATE_PET,
+                payload: {
+                    key: key,
+                    value: val
+                }
+            });
+        })
+    }
 }
 
-export { createPet, loadPet, updatePet }
+export { createPet, loadPet, updatePet, updatePetMultiple }

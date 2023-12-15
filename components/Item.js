@@ -4,7 +4,8 @@ const images = {
     item1: require('../assets/item1.png'),
     item2: require('../assets/item2.png'),
     item3: require('../assets/item3.png'),
-    item4: require('../assets/item4.png')
+    item4: require('../assets/item4.png'),
+    item5: require('../assets/item5.png'),
 };
 
 export const Item = ({ type, number, onPress, highlight }) => {
