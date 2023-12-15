@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   progressLabel: {
-    width: 60,
+    width: 65,
     color: '#127A33',
     fontWeight: 'bold',
     textTransform: "capitalize"
