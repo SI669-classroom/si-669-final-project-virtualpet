@@ -10,7 +10,7 @@ const images = {
 
 export const Item = ({ type, number, onPress }) => {
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress} disabled={!number}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <Image source={images[type]} style={!number && styles.disabled} />
             <Text style={styles.text}>{number ?? 0}</Text>
         </TouchableOpacity>

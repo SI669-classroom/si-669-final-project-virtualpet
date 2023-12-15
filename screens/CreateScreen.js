@@ -21,18 +21,26 @@ function CreateScreen({ navigation }) {
     const userId = getAuthUser()?.uid
 
     const handleClick = () => {
-        const newPet = {
-            name: name,
-            userId: userId,
-            type: types[typeIndex],
-            sanitary: 50,
-            satiety: 50,
-            mood: 50,
-            wasteNum: 0,
-            items: { item1: 10, item3: 10, item4: 10 }
+
+        if (typeIndex === 0) {
+            const newPet = {
+                name: name,
+                userId: userId,
+                type: types[typeIndex],
+                sanitary: 50,
+                satiety: 50,
+                mood: 50,
+                wasteNum: 0,
+                items: { item1: 10, item2: 0, item3: 10, item4: 10, item5: 0, }
+            }
+            dispatch(createPet(newPet))
+            navigation.navigate('Home')
         }
-        dispatch(createPet(newPet))
-        navigation.navigate('Home')
+        else {
+            Alert.alert('Premium Feature', 'Subcribe to unlock more pet types!', [
+                { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
+        }
     }
 
     return (
@@ -54,8 +62,9 @@ function CreateScreen({ navigation }) {
                             color={typeIndex === 0 ? "#AFDC89" : "#127A33"}
                         />
                     </Button>
-                    <View style={{ width: '50%', height: 320, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image source={images[types[typeIndex]]} />
+                    <View style={{ width: '50%', height: 320, alignItems: 'center', justifyContent: 'center', ...styles.shadowBox, }}>
+                        <Image source={images[types[typeIndex]]}
+                            style={{  resizeMode: 'contain', width: '100%' }} />
                     </View>
                     <Button
                         type="clear"
@@ -111,5 +120,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 10,
         backgroundColor: "white"
+    },
+    shadowBox: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.6,
+        shadowRadius: 4,
     }
 })
