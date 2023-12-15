@@ -42,6 +42,8 @@ function HomeScreen({ navigation }) {
   const [poopPosition, setPoopPosition] = useState({ top: 0, left: 0 });
   const [poopPositions, setPoopPositions] = useState([]);
   const [showPoopPopup, setShowPoopPopup] = useState(false);
+  const [showTradeModal, setShowTradeModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
 
   const pet = useSelector((state) => state.petStatus);
@@ -64,24 +66,39 @@ function HomeScreen({ navigation }) {
       setTimeout(() => {
         setTempImage(null);
       }, 3000);
-    }, 30000);
+    }, 40000);
 
     return () => clearInterval(poopTimer);
   }, [])
 
   const handleItemPress = (name) => {
+    console.log('Item ' + name + ' count: ', pet.items[name]);
+    if (pet.items[name] === 0) {
+      setSelectedItem(name);
+      setShowTradeModal(true);
+    } else {
+      const newImage = require('../assets/dog-happy.png');
+      setTempImage(newImage);
+      dispatch(updatePet(pet, items[name], pet[items[name]] + 10));
+      dispatch(updatePet(pet, 'items', { ...pet.items, [name]: pet.items[name] - 1 }));
+      setShowItems(false)
+      setTimeout(() => {
+        setTempImage(null);
+      }, 3000);
+    }
+  };
 
-    const newImage = require('../assets/dog-happy.png');
-    setTempImage(newImage);
-
-
-    dispatch(updatePet(pet, items[name], pet[items[name]] + 10));
-    dispatch(updatePet(pet, 'items', { ...pet.items, [name]: pet.items[name] - 1 }));
-    setShowItems(false)
-
-    setTimeout(() => {
-      setTempImage(null);
-    }, 6000);
+  const handleYesPress = (name) => {
+    // Get index of item
+    const items = {...pet.items};
+    items[name] += 1;
+    items['item5'] -= 1;
+    
+    // Update pet items
+    dispatch(updatePet(pet, 'items', items));
+  
+    setShowTradeModal(false)
+    setSelectedItem(null);
   };
 
   const handleItem5Press = () => {
@@ -165,7 +182,20 @@ function HomeScreen({ navigation }) {
         <Overlay isVisible={showPoopPopup} onBackdropPress={() => setShowPoopPopup(false)}>
           <View style={{ padding: 20 }}>
             <Text>POOP x 1 added to your bag</Text>
-            <Button style={{ padding: 10, marginTop: 10, borderRadius: 10, }} title="OK" onPress={handlePoopPopupConfirm} />
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', marginTop: '10%',}}>
+              <ActionButton type="OK" onPress={handlePoopPopupConfirm} />
+            </View>
+          </View>
+        </Overlay>
+      )}
+      {showTradeModal && (
+        <Overlay isVisible={true} onBackdropPress={() => setShowTradeModal(false)}>
+          <View style={{ padding: 20 }}>
+            <Text>{"Do you want to trade POOP X1 for " + selectedItem + "?"}</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', marginTop: '10%'}}>
+              <ActionButton type="Yes" onPress={() => handleYesPress(selectedItem)} />
+              <ActionButton type="No" onPress={() => setShowTradeModal(false)} />
+            </View>
           </View>
         </Overlay>
       )}
@@ -192,7 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   progressLabel: {
-    width: 60,
+    width: 65,
     color: '#127A33',
     fontWeight: 'bold',
     textTransform: "capitalize"
