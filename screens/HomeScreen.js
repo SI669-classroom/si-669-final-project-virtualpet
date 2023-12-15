@@ -24,7 +24,14 @@ const items =
   item4: 'mood'
 }
 
+const actionToStatus = {
+  Feed: 'satiety',
+  Groom: 'sanitary',
+  Play: 'mood'
+}
+
 function HomeScreen({ navigation }) {
+  const [action, setAction] = useState()
   const dispatch = useDispatch()
   const userId = getAuthUser()?.uid
   const [showItems, setShowItems] = useState(false)
@@ -36,7 +43,6 @@ function HomeScreen({ navigation }) {
   }, [])
 
   const [tempImage, setTempImage] = useState(null);
-
 
   const handleItemPress = (name) => {
 
@@ -61,14 +67,14 @@ function HomeScreen({ navigation }) {
       <View style={{ backgroundColor: "white", paddingVertical: 10, paddingHorizontal: 30, borderRadius: '50%', marginBottom: 20 }}>
         <Text style={styles.petName}>{pet.name}</Text>
       </View>
-      <View style={{ width: '100%', height: 320, alignItems: 'center', position: "relative", marginBottom: 20 }}>
-        <Image source={tempImage || images[pet.type]} style={{ ...styles.shadowBox, flex: 1, resizeMode: 'contain' }} />
+      <View style={{ width: '100%', height: 320, alignItems: 'center', position: "relative", marginBottom: 20, ...styles.shadowBox }}>
+        <Image source={tempImage || images[pet.type]} style={{ flex: 1, resizeMode: 'contain' }} />
         <Button
-          containerStyle={{ position: "absolute", right: 9, bottom: 135 }}
+          containerStyle={{ position: "absolute", right: 9, bottom: 110 }}
           buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
           onPress={() => setShowItems(!showItems)}
         >
-          <Image source={require('../assets/backpack.png')} style={{ ...styles.shadowBox, width: 60, height: 60 }} />
+          <Image source={require('../assets/backpack.png')} style={{ width: 60, height: 60 }} />
         </Button>
       </View>
 
@@ -82,34 +88,41 @@ function HomeScreen({ navigation }) {
       </View>
 
       <View style={styles.row}>
-        {['Feed', 'Groom'].map((action, i) => <ActionButton key={i} type={action} onPress={() => setShowItems(true)} />)}
+        {['Feed', 'Groom'].map((action, i) => <ActionButton key={i} type={action} onPress={() => { setShowItems(true); setAction(action) }} />)}
       </View>
 
       <View style={styles.row}>
-        <ActionButton type="Play" onPress={() => setShowItems(true)} />
+        <ActionButton type="Play" onPress={() => { setShowItems(true); setAction('Play') }} />
         <ActionButton type="Walk" onPress={() =>
           navigation.navigate('Walk')
         } />
       </View>
 
-      {/* <Button onPress={() => signOut()}>Sign out</Button> */}
+      <Button onPress={() => signOut()}>Sign out</Button>
+      <Button onPress={() => navigation.navigate('Create')}>Sign out</Button>
       {
         showItems &&
-        <TouchableOpacity
+        <View
           style={styles.itemContainer}
-          onPress={() => setShowItems(false)}
         >
           <Text style={{ fontSize: 20 }}>My Items</Text>
+          <Icon
+            name='close'
+            type='material'
+            color='#000'
+            containerStyle={{ position: 'absolute', right: 30, top: 30 }}
+            onPress={() => setShowItems(false)} />
           <View style={styles.row}>
             {Object.keys(items).slice(0, 4).map((name, i) =>
               <Item
                 key={i}
                 number={pet.items[name]}
                 type={name}
+                highlight={actionToStatus[action] === items[name]}
                 onPress={() => handleItemPress(name)}
               />)}
           </View>
-        </TouchableOpacity>
+        </View>
       }
     </ImageBackground >
   );
@@ -147,6 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   itemContainer: {
+    borderRadius: '40 0',
     backgroundColor: 'beige',
     width: "100%", height: "40%",
     position: "absolute", bottom: 0,

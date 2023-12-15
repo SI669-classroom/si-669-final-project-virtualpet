@@ -21,24 +21,32 @@ function CreateScreen({ navigation }) {
     const userId = getAuthUser()?.uid
 
     const handleClick = () => {
-        const newPet = {
-            name: name,
-            userId: userId,
-            type: types[typeIndex],
-            sanitary: 50,
-            satiety: 50,
-            mood: 50,
-            wasteNum: 0,
-            items: { item1: 10, item3: 10, item4: 10 }
+
+        if (typeIndex === 0) {
+            const newPet = {
+                name: name,
+                userId: userId,
+                type: types[typeIndex],
+                sanitary: 50,
+                satiety: 50,
+                mood: 50,
+                wasteNum: 0,
+                items: { item1: 10, item3: 10, item4: 10 }
+            }
+            dispatch(createPet(newPet))
+            navigation.navigate('Home')
         }
-        dispatch(createPet(newPet))
-        navigation.navigate('Home')
+        else {
+            Alert.alert('Premium Feature', 'Subcribe to unlock more pet types!', [
+                { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
+        }
     }
 
     return (
         <View style={{
             flex: 1, alignItems: 'center', justifyContent: "space-evenly", height: '100%', paddingBottom: "10%",
-            backgroundColor: "#D6EEBB"
+            backgroundColor: "#D6E9E1"
         }} behavior='padding'>
             <View style={{ ...styles.col }}>
                 <Text style={{ fontSize: 28, fontWeight: 900, height: "10%" }}>{name}</Text>
@@ -54,8 +62,9 @@ function CreateScreen({ navigation }) {
                             color={typeIndex === 0 ? "#AFDC89" : "#127A33"}
                         />
                     </Button>
-                    <View style={{ width: '50%', height: 320, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image source={images[types[typeIndex]]} />
+                    <View style={{ width: '50%', height: 320, alignItems: 'center', justifyContent: 'center', ...styles.shadowBox, }}>
+                        <Image source={images[types[typeIndex]]}
+                            style={{  resizeMode: 'contain', width: '100%' }} />
                     </View>
                     <Button
                         type="clear"
@@ -111,5 +120,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 10,
         backgroundColor: "white"
+    },
+    shadowBox: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.6,
+        shadowRadius: 4,
     }
 })

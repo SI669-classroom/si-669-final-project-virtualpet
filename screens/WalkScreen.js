@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { loadPet } from '../data/Action';
 import { useDispatch, useSelector } from 'react-redux';
 import { Icon, LinearProgress, Overlay } from 'react-native-elements'
+import { ActionButton } from '../components/ActionButton';
 
 const images = {
     dog: require('../assets/dog-walk.png'),
@@ -59,7 +60,7 @@ function WalkScreen({ navigation }) {
         setHasWalkEnded(true);
         const walkMinutes = Math.floor(seconds / 60);
         const walkSeconds = seconds - (walkMinutes * 60);
-        setWalkEndMessage(`You just walked with ${pet.name} \n  for ${walkMinutes} min and ${walkSeconds} sec.`);
+        setWalkEndMessage(`You just walked with ${pet.name} \n  for ${walkMinutes} min and ${walkSeconds} sec!`);
     };
 
     const formatTime = (totalSeconds) => {
@@ -88,24 +89,44 @@ function WalkScreen({ navigation }) {
     const renderButton = () => {
         if (isWalking && !isPaused) {
             return (
+                /** 
                 <View style={styles.buttonContainer}>
                     <Button buttonStyle={{ margin: 20 }} onPress={pauseWalk}>Pause</Button>
                     <Button buttonStyle={{ margin: 20 }} onPress={stopWalk}>Stop</Button>
                 </View>
+                */
+                <View style={styles.row}>
+                    <ActionButton type="Pause" onPress={pauseWalk} />
+                    <ActionButton type="Stop" onPress={stopWalk} />
+                </View>
             )
         } else if (isWalking && isPaused) {
             return (
+                /** 
                 <View style={styles.buttonContainer}>
                     <Button buttonStyle={{ margin: 20 }} onPress={restartWalk}>Restart</Button>
                     <Button buttonStyle={{ margin: 20 }} onPress={stopWalk}>Stop</Button>
                 </View>
+                */
+                <View style={styles.row}>
+                    <ActionButton type="Restart" onPress={restartWalk} />
+                    <ActionButton type="Stop" onPress={stopWalk} />
+                </View>
             )
         } else {
             return (
+                /** 
                 <View style={styles.buttonContainer}>
                     <Button buttonStyle={{ margin: 20, marginTop: 40, }} onPress={startWalk}>Start Walk</Button>
                     <Button buttonStyle={{ margin: 20, marginTop: 40, }} onPress={() => navigation.navigate('Home')}>Back</Button>
                 </View>
+                */
+                <View style={styles.row}>
+                    <ActionButton type="Start walk" onPress={startWalk} />
+                    <ActionButton type="Back" onPress={() =>
+                    navigation.navigate('Home')
+                } />
+          </View>
             )
         }
     }
@@ -127,12 +148,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#D6EEBB',
+        backgroundColor: '#D6E9E1',
         gap: 10
     },
     row: {
         flexDirection: 'row',
-        gap: 10
+        gap: 10,
+        marginTop: 10,
     },
     linearProgress: {
         height: 20,
@@ -166,7 +188,7 @@ const styles = StyleSheet.create({
         marginTop: 25,
     },
     statementText: {
-        fontSize: 35,
+        fontSize: 28,
     },
 });
 
