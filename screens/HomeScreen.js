@@ -1,5 +1,5 @@
 import { Button } from '@rneui/themed';
-import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { getAuthUser, signOut } from '../AuthManager';
 import { useEffect, useState } from 'react';
 import { loadPet } from '../data/Action';
@@ -8,13 +8,15 @@ import { Icon, LinearProgress, Overlay } from 'react-native-elements'
 import { Item } from '../components/Item';
 import { ActionButton } from '../components/ActionButton';
 import { updatePet } from '../data/Action';
+import Poop from '../components/Poop';
 
 
 const images = {
   dog: require('../assets/dog-default.png'),
   cat: require('../assets/cat.png'),
   parrot: require('../assets/parrot.png'),
-  hamster: require('../assets/hamster.png')
+  hamster: require('../assets/hamster.png'),
+  poop: require('../assets/poop.png')
 };
 
 const items =
@@ -22,22 +24,43 @@ const items =
   item1: 'satiety',
   item2: 'satiety',
   item3: 'sanitary',
-  item4: 'mood'
+  item4: 'mood',
+  item5: 'poop',
 }
 
 function HomeScreen({ navigation }) {
   const dispatch = useDispatch()
   const userId = getAuthUser()?.uid
   const [showItems, setShowItems] = useState(false)
+  const [poopPosition, setPoopPosition] = useState({ top: 0, left: 0 });
+  const [poopPositions, setPoopPositions] = useState([]);
+  const [showPoopPopup, setShowPoopPopup] = useState(false);
+
 
   const pet = useSelector((state) => state.petStatus);
+  const [tempImage, setTempImage] = useState(null);
+  const [collectedPoop, setCollectedPoop] = useState(0);
 
   useEffect(() => {
-    dispatch(loadPet(userId))
+    dispatch(loadPet(userId));
+
+    const poopTimer = setInterval(() => {
+      const screenWidth = Dimensions.get('window').width;
+      const screenHeight = Dimensions.get('window').height;
+      const randomLeft = Math.random() * (screenWidth-50); 
+      const randomTop = Math.random() * (screenHeight * 0.6 -50); 
+      const newPoopPosition = { left: randomLeft, top: randomTop };
+      
+      setPoopPositions(oldPositions => [...oldPositions, newPoopPosition]);
+      const newImage = require('../assets/dog-upset.png');
+      setTempImage(newImage);
+      setTimeout(() => {
+        setTempImage(null);
+      }, 3000);
+    }, 30000);
+
+    return () => clearInterval(poopTimer);
   }, [])
-
-  const [tempImage, setTempImage] = useState(null);
-
 
   const handleItemPress = (name) => {
 
@@ -51,7 +74,18 @@ function HomeScreen({ navigation }) {
 
     setTimeout(() => {
       setTempImage(null);
-    }, 3000);
+    }, 6000);
+  };
+
+  const handleItem5Press = () => {
+    setCollectedPoop((prevCount) => prevCount + 1);
+    setShowPoopPopup(true);
+  };
+
+  const handlePoopPopupConfirm = () => {
+    dispatch(updatePet(pet, 'items', { ...pet.items, ['item5']: pet.items['item5'] + 1 }));
+    setPoopPositions((oldPositions) => oldPositions.slice(1));
+    setShowPoopPopup(false);
   };
 
   return (
@@ -102,7 +136,7 @@ function HomeScreen({ navigation }) {
         >
           <Text style={{ fontSize: 20 }}>My Items</Text>
           <View style={styles.row}>
-            {Object.keys(items).slice(0, 4).map((name, i) =>
+            {Object.keys(items).slice(0, 5).map((name, i) =>
               <Item
                 key={i}
                 number={pet.items[name]}
@@ -112,6 +146,17 @@ function HomeScreen({ navigation }) {
           </View>
         </TouchableOpacity>
       }
+      {poopPositions.map((position, index) => (
+        <Poop key={index} onPress={handleItem5Press} position={position} />
+      ))}
+      {showPoopPopup && (
+        <Overlay isVisible={showPoopPopup} onBackdropPress={() => setShowPoopPopup(false)}>
+          <View style={{ padding: 20 }}>
+            <Text>POOP x 1 added to your bag</Text>
+            <Button style={{ padding: 10, marginTop: 10, borderRadius: 10, }} title="OK" onPress={handlePoopPopupConfirm} />
+          </View>
+        </Overlay>
+      )}
     </ImageBackground >
   );
 }
