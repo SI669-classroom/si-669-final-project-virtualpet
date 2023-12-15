@@ -106,7 +106,7 @@ function HomeScreen({ navigation }) {
       <View style={{ width: '100%', height: 320, alignItems: 'center', position: "relative", marginBottom: 20, ...styles.shadowBox }}>
         <Image source={tempImage || images[pet.type]} style={{ flex: 1, resizeMode: 'contain' }} />
         <Button
-          containerStyle={{ position: "absolute", right: 9, bottom: 110 }}
+          containerStyle={{ position: "absolute", right: 9, bottom: 135 }}
           buttonStyle={{ backgroundColor: 'transparent', padding: 0 }}
           onPress={() => setShowItems(!showItems)}
         >
@@ -134,8 +134,6 @@ function HomeScreen({ navigation }) {
         } />
       </View>
 
-      <Button onPress={() => signOut()}>Sign out</Button>
-      <Button onPress={() => navigation.navigate('Create')}>Sign out</Button>
       {
         showItems &&
         <View

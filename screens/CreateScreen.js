@@ -31,7 +31,7 @@ function CreateScreen({ navigation }) {
                 satiety: 50,
                 mood: 50,
                 wasteNum: 0,
-                items: { item1: 10, item3: 10, item4: 10 }
+                items: { item1: 10, item2: 0, item3: 10, item4: 10, item5: 0 }
             }
             dispatch(createPet(newPet))
             navigation.navigate('Home')
